@@ -10,8 +10,8 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[
-        logging.FileHandler("log/scraping.log"),  # Log to file
-        logging.StreamHandler(),  # Log to console
+        logging.FileHandler("./log/scraping.log"),  # Log to file
+        # logging.StreamHandler(),  # Log to console
     ]
 )
 
@@ -382,7 +382,7 @@ def scrape_profile(driver, profile_url, visited_profiles):
     logging.info(f"Scraping profile: {profile_url}")
     
     # Visit the profile URL
-    driver.get(profile_url)
+    # driver.get(profile_url)
     
     # Scroll to load the entire page content
     scroll_and_load(driver)

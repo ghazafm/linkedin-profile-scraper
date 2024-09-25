@@ -15,7 +15,7 @@
             {
                 "company_name": "BEM Fakultas Ilmu Komputer Universitas Brawijaya ",
                 "job_title": "Director General of Student Welfare - Ministry of Student Advocacy and Welfare\nDirector General of Student Welfare - Ministry of Student Advocacy and Welfare",
-                "location": "Malang, East Java, Indonesia · On-site",
+                "location": "Jan 2024 - Present · 9 mos",
                 "type": " Full-time",
                 "dates": "Jan 2024 - Present · 9 mos",
                 "description": "• Responsible for advocating, serving, facilitating student need, and as a mouthpiece from students to bureaucrats. \n• Proactive, responsive, and professional in advocating and serving students to realize justice and student welfare."
@@ -47,7 +47,7 @@
             {
                 "company_name": "GDSC University of Brawijaya (UB) ",
                 "job_title": "Member Google DSC University of Brawijaya\nMember Google DSC University of Brawijaya",
-                "location": "Malang, East Java, Indonesia · Hybrid",
+                "location": "Oct 2022 - Present · 2 yrs",
                 "type": " Part-time",
                 "dates": "Oct 2022 - Present · 2 yrs",
                 "description": "Participating in #TechSeries Workshop and GDSC UB Journey in Machine Learning\nParticipating in #TechSeries Workshop and GDSC UB Journey in Machine Learning"
@@ -75,50 +75,26 @@
                 "type": "Full-time",
                 "dates": "Apr 2023 - Aug 2023 · 5 mos",
                 "description": null
-            },
-            {
-                "company_name": "Pusat Prestasi Nasional",
-                "job_title": "Liaison Officer Division of MTQMN (Musabaqoh Tilawatil Qur'an Mahasiswa Nasional) XVII Committee",
-                "location": null,
-                "type": "Full-time",
-                "dates": "Sep 2023 - Nov 2023 · 3 mos",
-                "description": null
-            },
-            {
-                "company_name": "Pusat Prestasi Nasional",
-                "job_title": "Public Relations Division of GEMASTIK (Pagelaran Mahasiswa Nasional bidang TIK) XVI Committee",
-                "location": null,
-                "type": "Full-time",
-                "dates": "Sep 2023 - Sep 2023 · 1 mo",
-                "description": "• Responsible for providing assistance and guidance to all existing stakeholders, including judges and participants.\n• As a bridge that connects internal parties with external parties and as a person in charge of making and\npublishing chain messages and crisis centers.\n…see more"
-            },
-            {
-                "company_name": "Pusat Prestasi Nasional",
-                "job_title": "Liaison Officer Division of SATRIA DATA (Statistika Ria dan Festival Sains Data) 2023 Committee",
-                "location": null,
-                "type": "Full-time",
-                "dates": "Aug 2023 - Aug 2023 · 1 mo",
-                "description": "• Assist in controlling the implementation of the competition\n• Accompanying and being a time keeper in the SEC Division Competition\n• Bridging between the competition finalist team and the committee\n…see more"
             }
         ],
         "education": [
             {
-                "instance_name": "University of Brawijaya",
-                "degree_field": "Undergraduate Student, Informatics Engineering",
+                "institution": "University of Brawijaya",
+                "degree_field": "Undergraduate Student, Informatics Engineering\nUndergraduate Student, Informatics Engineering",
                 "graduation_year": "2022 - 2026"
             },
             {
-                "instance_name": "SMA IT Ihsanul Fikri Mungkid",
-                "degree_field": "Senior High School, Science",
+                "institution": "SMA IT Ihsanul Fikri Mungkid",
+                "degree_field": "Senior High School, Science\nSenior High School, Science",
                 "graduation_year": "2019 - 2022"
             }
         ],
-        "certificate": [
+        "certificates": [
             {
                 "cert_name": "Research Program Certificate",
                 "issuer": "SMA IT Ihsanul Fikri Mungkid",
                 "issue_date": "Issued Mar 2022",
-                "credential_url": "https://www.linkedin.com/in/hasanfadhlillah/details/experience?profileUrn=urn%3Ali%3Afsd_profile%3AACoAAD1H_FwB8jP5XY_PJkxR0NqGwyFwNSDGgEE"
+                "credential_url": "https://drive.google.com/file/d/134HiDACWLjXbv9vEIynzXlX_BG0mK6NX/view?usp=share_link"
             }
         ],
         "projects": [
@@ -126,61 +102,40 @@
                 "project_title": "Analysis and Prediction of House Prices in the Greater Jakarta Area",
                 "dates": null,
                 "organization": "Associated with BCC Fakultas Ilmu Komputer Universitas Brawijaya",
-                "description": "• Data Scientist, Machine Learning\n• Data Competition ISFEST (Information System Festival) 2023",
+                "description": "Analysis and Prediction of House Prices in the Greater Jakarta Area",
                 "link": "https://www.linkedin.com/in/hasanfadhlillah/overlay/urn:li:fsd_profileProject:(ACoAAD1H_FwB8jP5XY_PJkxR0NqGwyFwNSDGgEE,1521100557)/creators?profileUrn=urn%3Ali%3Afsd_profile%3AACoAAD1H_FwB8jP5XY_PJkxR0NqGwyFwNSDGgEE"
             },
             {
                 "project_title": "Content-based Movie Recommendation System with Rule-Based Reasoning Approach Using Cosine Similarity",
                 "dates": null,
                 "organization": "Associated with University of Brawijaya",
-                "description": "• Data Scientist, Machine Learning, Artificial Intelligence, Deployment with Streamlit\n• Artificial Intelligence Subject Final Project",
+                "description": "Content-based Movie Recommendation System with Rule-Based Reasoning Approach Using Cosine Similarity",
                 "link": "https://www.linkedin.com/in/hasanfadhlillah/overlay/urn:li:fsd_profileProject:(ACoAAD1H_FwB8jP5XY_PJkxR0NqGwyFwNSDGgEE,1521628345)/creators?profileUrn=urn%3Ali%3Afsd_profile%3AACoAAD1H_FwB8jP5XY_PJkxR0NqGwyFwNSDGgEE"
             }
         ],
         "volunteering": [
             {
                 "role": "Volunteer of \"Muda Bantu Indonesia #DariKitaBuatKamu\"\nVolunteer of \"Muda Bantu Indonesia #DariKitaBuatKamu\"",
-                "organization": "Muda Peduli Indonesia",
-                "duration": "Mar 2020 - Jul 2020 · 5 mos",
-                "cause": "Disaster and Humanitarian Relief",
-                "description": null
+                "organization": "Muda Peduli Indonesia\nMuda Peduli Indonesia",
+                "duration": "Mar 2020 - Jul 2020 · 5 mos"
             },
             {
                 "role": "FON Volunteers #FONLawanCorona\nFON Volunteers #FONLawanCorona",
-                "organization": "Forum OSIS Nusantara",
-                "duration": "May 2020 - Sep 2020 · 5 mos",
-                "cause": "Disaster and Humanitarian Relief",
-                "description": null
+                "organization": "Forum OSIS Nusantara\nForum OSIS Nusantara",
+                "duration": "May 2020 - Sep 2020 · 5 mos"
             }
         ],
-        "skills": [
-            {
-                "tittle": "SQL",
-                "endorsements_by": [
-                    "Optimizing Waste Management in Indonesia: Unveiling Key Insights and Synergies for a Sustainable Future\nOptimizing Waste Management in Indonesia: Unveiling Key Insights and Synergies for a Sustainable Future"
-                ],
-                "endorsements": null
-            },
-            {
-                "tittle": "Regression Models",
-                "endorsements_by": [
-                    "Analysis and Prediction of House Prices in the Greater Jakarta Area\nAnalysis and Prediction of House Prices in the Greater Jakarta Area"
-                ],
-                "endorsements": null
-            }
-        ],
-        "honor": [
+        "skills": [],
+        "honors": [
             {
                 "title": "PKM GFT (Gagasan Futuristik Tertulis) Passes Incentive Scheme",
-                "issuing_institution": "Issued by Puspresnas Kemendikbudristek Ditjen Dikti",
-                "issued_date": "Aug 2023",
-                "media_url": null
+                "issuer": "Issued by Puspresnas Kemendikbudristek Ditjen Dikti",
+                "issued_date": "Aug 2023\nIssued by Puspresnas Kemendikbudristek Ditjen Dikti"
             },
             {
                 "title": "Top 8 Finalists of Data Competition",
-                "issuing_institution": "Issued by ISFEST (Information System Festival) UMN 2023",
-                "issued_date": "Jul 2023",
-                "media_url": null
+                "issuer": "Issued by ISFEST (Information System Festival) UMN 2023",
+                "issued_date": "Jul 2023\nIssued by ISFEST (Information System Festival) UMN 2023"
             }
         ],
         "organizations": [

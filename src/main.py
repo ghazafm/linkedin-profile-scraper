@@ -10,8 +10,8 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[
-        logging.FileHandler("log/scraping.log"),
-        logging.StreamHandler(),  # Log to console
+        logging.FileHandler("./log/scraping.log"),
+        # logging.StreamHandler(),  # Log to console
     ]
 )
 
@@ -32,7 +32,8 @@ def main():
 
         # Initialize the Selenium driver
         logging.info("Starting Chrome with remote debugging...")
-        driver = start_chrome_with_debug()
+        # driver = start_chrome_with_debug()
+        driver = webdriver.Chrome()
 
         # Log in to LinkedIn
         driver.get('https://www.linkedin.com/login')

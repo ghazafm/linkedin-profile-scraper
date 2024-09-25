@@ -14,7 +14,7 @@ import logging
 from functools import wraps
 
 # Load environment variables
-load_dotenv()
+load_dotenv(dotenv_path='./environment/.env')
 timeout = int(os.getenv("TIMEOUT"))
 TRIES = int(os.getenv('TRIES'))
 DELAY = float(os.getenv('DELAY'))
@@ -29,8 +29,8 @@ logging.basicConfig(
     level=logging.INFO,  
     format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[
-        logging.FileHandler("log/scraping.log"),  
-        logging.StreamHandler()  # Log to console
+        logging.FileHandler("./log/scraping.log"),  
+        # logging.StreamHandler()  # Log to console
     ]
 )
 
@@ -204,7 +204,7 @@ def extract_elements(driver, by, element, multiple=False, attribute=None, timeou
 
 
 # 4. Data Storage
-def save_to_json(data, filename="scraped_profiles.json"):
+def save_to_json(data, filename="./data/scraped_profiles.json"):
     """
     Save the scraped data to a JSON file.
     """
