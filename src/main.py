@@ -3,7 +3,7 @@ import logging
 from dotenv import load_dotenv
 from selenium import webdriver
 from helper import login, start_chrome_with_debug, save_to_json
-from scrape import scrape_profile, extract_more_profiles
+from profile_scrape import scrape_profile, extract_more_profiles
 
 # Setup logging
 logging.basicConfig(
@@ -32,12 +32,12 @@ def main():
 
         # Initialize the Selenium driver
         logging.info("Starting Chrome with remote debugging...")
-        # driver = start_chrome_with_debug()
-        driver = webdriver.Chrome()
+        driver = start_chrome_with_debug()
+        # driver = webdriver.Chrome()
 
         # Log in to LinkedIn
         driver.get('https://www.linkedin.com/login')
-        login(driver)
+        # login(driver)
 
         profile_url = "https://www.linkedin.com/in/fauzanghaza"
         profile_data = []

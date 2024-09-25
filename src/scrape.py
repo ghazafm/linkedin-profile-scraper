@@ -382,7 +382,7 @@ def scrape_profile(driver, profile_url, visited_profiles):
     logging.info(f"Scraping profile: {profile_url}")
     
     # Visit the profile URL
-    # driver.get(profile_url)
+    driver.get(profile_url)
     
     # Scroll to load the entire page content
     scroll_and_load(driver)
@@ -436,3 +436,5 @@ def extract_company_people_links(driver, company_url):
     profile_links = get_objects(driver, By.XPATH, profile_links_xpath)
 
     return [extract_elements(profile, By.XPATH, ".", attribute="href") for profile in profile_links]
+
+

@@ -1,7 +1,6 @@
 import os
 import time
 import json
-import pickle
 from pymongo import MongoClient
 from dotenv import load_dotenv
 from selenium import webdriver
@@ -121,30 +120,46 @@ def login(driver):
 
 
 @retry(ExceptionToCheck=(NoSuchElementException, TimeoutException), tries=TRIES, delay=DELAY)
-def scroll_and_load(driver):
+def scroll_and_load(driver, wait_time=2, max_scrolls=None):
     """
     Scroll down the page and click the 'Show more results' button if available.
     Useful for loading dynamic content.
+    
+    Args:
+        driver: Selenium WebDriver instance.
+        wait_time: Time to wait after each scroll (default is 2 seconds).
+        max_scrolls: Maximum number of scrolls. If None, scroll infinitely (default behavior).
     """
     last_height = driver.execute_script("return document.body.scrollHeight")
+    scroll_count = 0
 
     while True:
+        # Scroll down to the bottom of the page
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(2)  # Wait for the page to load
-        
-        # Try to click the "Show more results" button
+        time.sleep(wait_time)  # Wait for the page to load
+
+        # Try to click the "Show more results" button, if available
         try:
-            show_more_button = driver.find_element(By.XPATH, "//button[contains(@class, 'scaffold-finite-scroll__load-button')]")
+            show_more_button = get_object(driver, By.XPATH, "//button[@id='ember861']")
             if show_more_button:
                 show_more_button.click()
-                time.sleep(2)  # Allow time for new content to load
+                time.sleep(wait_time)  # Allow time for new content to load
         except NoSuchElementException:
             pass  # Button not found; continue scrolling
 
         new_height = driver.execute_script("return document.body.scrollHeight")
+
+        # Break the loop if the page height hasn't increased (end of scrollable content)
         if new_height == last_height:
-            break  # Exit loop if the page height hasn't increased
+            break
+
         last_height = new_height
+        scroll_count += 1
+
+        # Stop if the maximum number of scrolls has been reached
+        if max_scrolls and scroll_count >= max_scrolls:
+            logging.info(f"Reached the maximum scroll limit of {max_scrolls}.")
+            break
 
 
 # 2. Selenium Utility Functions for Element Handling
@@ -262,3 +277,18 @@ def start_chrome_with_debug():
     chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
     driver = webdriver.Chrome(options=chrome_options)
     return driver
+
+
+# Crawling
+def save_scraped_profile(profile_url, scraped_profiles_file="./data/scraped_profiles.json"):
+    try:
+        with open(scraped_profiles_file, "r+", encoding="utf-8") as f:
+            scraped_profiles = json.load(f)
+            if profile_url not in scraped_profiles:
+                scraped_profiles.append(profile_url)
+                f.seek(0)
+                json.dump(scraped_profiles, f, ensure_ascii=False, indent=4)
+    except FileNotFoundError:
+        # If the file doesn't exist, create it
+        with open(scraped_profiles_file, "w", encoding="utf-8") as f:
+            json.dump([profile_url], f, ensure_ascii=False, indent=4)
