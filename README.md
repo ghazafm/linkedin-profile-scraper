@@ -6,19 +6,20 @@ A LinkedIn profile scraper built using Selenium. The scraper logs into LinkedIn,
 
 ```bash
 SCRAPER-LINKEDIN-PROFILE/
-├── data/                   # Output folder for scraped data
-│   └── scraped_profiles.json  # JSON file containing scraped LinkedIn profile data
-├── environment/            # Environment-specific files
-│   └── .env                # Environment variables file
-├── log/                    # Logs folder for tracking scraping operations
-│   └── scraping.log        # Log file for storing process logs
-├── src/                    # Source code for the scraper
-│   ├── helper.py           # Helper functions (login, saving data, etc.)
-│   └── scrape.py           # Scraping functions for LinkedIn profile data
-├── .gitignore              # Git ignore file (ensure sensitive files like .env are not pushed)
-├── LICENSE                 # License file (if applicable)
-├── main.py                 # Main script for running the scraper
-└── README.md               # Project documentation (this file)
+├── data/                       # Output folder for scraped data
+│   ├── scraped_profiles.json   # JSON file containing scraped LinkedIn profile data
+    └── root_profiles.json      # JSON file for set the root profile that you want to scrape
+├── environment/                # Environment-specific files
+│   └── .env                    # Environment variables file
+├── log/                        # Logs folder for tracking scraping operations
+│   └── scraping.log            # Log file for storing process logs
+├── src/                        # Source code for the scraper
+│   ├── helper.py               # Helper functions (login, saving data, etc.)
+│   └── scrape.py               # Scraping functions for LinkedIn profile data
+├── .gitignore                  # Git ignore file (ensure sensitive files like .env are not pushed)
+├── LICENSE                     # License file (if applicable)
+├── main.py                     # Main script for running the scraper
+└── README.md                   # Project documentation (this file)
 ```
 
 ## Requirements
