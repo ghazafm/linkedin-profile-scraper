@@ -11,7 +11,10 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
 import logging
 from functools import wraps
-
+import sqlite3
+import random
+import csv
+from selenium.webdriver.common.action_chains import ActionChains
 # Load environment variables
 load_dotenv(dotenv_path='./environment/.env')
 timeout = int(os.getenv("TIMEOUT"))
@@ -219,7 +222,7 @@ def extract_elements(driver, by, element, multiple=False, attribute=None, timeou
 
 
 # 4. Data Storage
-def save_to_json(data, filename="./data/scraped_profiles.json"):
+def save_to_json(data, filename="./data/profile_list.json"):
     """
     Save the scraped data to a JSON file.
     """
@@ -280,15 +283,138 @@ def start_chrome_with_debug():
 
 
 # Crawling
-def save_scraped_profile(profile_url, scraped_profiles_file="./data/scraped_profiles.json"):
+def save_profile_list(db_path, profile_url):
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    
     try:
-        with open(scraped_profiles_file, "r+", encoding="utf-8") as f:
-            scraped_profiles = json.load(f)
-            if profile_url not in scraped_profiles:
-                scraped_profiles.append(profile_url)
-                f.seek(0)
-                json.dump(scraped_profiles, f, ensure_ascii=False, indent=4)
+        cursor.execute("INSERT INTO profile_list (profile_url) VALUES (?)", (profile_url,))
+        conn.commit()
+    except sqlite3.IntegrityError:
+        pass
+    
+    conn.close()
+    
+# Load scraped profiles from SQLite
+def load_profile_list(db_path):
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT profile_url FROM PROFILE_LIST")
+    profile_list = set([row[0] for row in cursor.fetchall()])
+    
+    conn.close()
+    return profile_list
+    
+
+def is_profile_scraped(db_path, profile_url):
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT profile_url FROM PROFILE_LIST WHERE profile_url = ?", (profile_url,))
+    result = cursor.fetchone()
+    
+    conn.close()
+    
+    return result is not None
+            
+            
+
+
+def init_db(db_path):
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    
+
+    # Create table for scraped profiles
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS PROFILE_LIST (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        profile_url TEXT UNIQUE NOT NULL
+    )
+    ''')
+
+    conn.commit()
+    conn.close()
+    
+
+
+
+# Function to load root profiles from a JSON file
+def load_profiles_from_json(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            profiles = json.load(file)  # Load profiles from JSON
+            logging.info(f"Loaded {len(profiles)} profiles from {file_path}")
+            return set(profiles)  # Return as a set
     except FileNotFoundError:
-        # If the file doesn't exist, create it
-        with open(scraped_profiles_file, "w", encoding="utf-8") as f:
-            json.dump([profile_url], f, ensure_ascii=False, indent=4)
+        logging.error(f"File {file_path} not found.")
+        return set()
+
+# Function to load root profiles from a TXT file (one URL per line)
+def load_profiles_from_txt(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            profiles = {line.strip() for line in file}  # Remove extra whitespace and return as set
+            logging.info(f"Loaded {len(profiles)} profiles from {file_path}")
+            return profiles
+    except FileNotFoundError:
+        logging.error(f"File {file_path} not found.")
+        return set()
+
+# Function to load root profiles from a CSV file
+def load_profiles_from_csv(file_path):
+    try:
+        with open(file_path, newline='') as csvfile:
+            reader = csv.reader(csvfile)
+            profiles = {row[0].strip() for row in reader if row}  # Read first column, return as set
+            logging.info(f"Loaded {len(profiles)} profiles from {file_path}")
+            return profiles
+    except FileNotFoundError:
+        logging.error(f"File {file_path} not found.")
+        return set()
+    
+    
+def add_random_delay(min_time=5, max_time=30):
+    """Adds a random delay to mimic human-like pauses."""
+    delay = random.uniform(min_time, max_time)
+    time.sleep(delay)
+    
+
+def mimic_human_interaction(driver):
+    """Mimics human interaction by randomly moving the mouse and scrolling."""
+    action = ActionChains(driver)
+    x_offset = random.randint(100, 500)
+    y_offset = random.randint(100, 500)
+    action.move_by_offset(x_offset, y_offset).perform()
+    
+    # Scroll randomly
+    scroll_distance = random.randint(100, 500)
+    driver.execute_script(f"window.scrollBy(0, {scroll_distance});")
+    add_random_delay()
+    
+    
+    
+def create_session(email, password):
+    """Logs in to LinkedIn using Selenium and returns a requests.Session."""
+    driver = webdriver.Chrome()
+    
+    # Step 1: Navigate to LinkedIn's login page
+    driver.get('https://www.linkedin.com/checkpoint/rm/sign-in-another-account')
+    add_random_delay()
+    
+    # Step 2: Enter login details and submit
+    driver.find_element(By.ID, 'username').send_keys(email)
+    driver.find_element(By.ID, 'password').send_keys(password)
+    driver.find_element(By.XPATH, '//*[@id="organic-div"]/form/div[3]/button').click()
+    add_random_delay()
+    mimic_human_interaction(driver)
+
+    # Step 3: Wait for successful login and retrieve cookies
+    cookies = driver.get_cookies()
+    session = requests.Session()
+    for cookie in cookies:
+        session.cookies.set(cookie['name'], cookie['value'])
+
+    driver.quit()
+    return session

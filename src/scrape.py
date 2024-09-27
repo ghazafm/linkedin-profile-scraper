@@ -2,7 +2,7 @@ import logging
 from urllib.parse import urlparse, urlunparse
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
-from helper import scroll_and_load, get_object, get_objects, extract_elements
+from src.helper import scroll_and_load, get_object, get_objects, extract_elements
 
 
 # Setup logging to file and console

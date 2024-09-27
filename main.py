@@ -2,8 +2,8 @@ import os
 import logging
 from dotenv import load_dotenv
 from selenium import webdriver
-from helper import login, start_chrome_with_debug, save_to_json
-from profile_scrape import scrape_profile, extract_more_profiles
+from src.helper import login, start_chrome_with_debug, save_to_json
+from src.scrape import scrape_profile, extract_more_profiles
 
 # Setup logging
 logging.basicConfig(
@@ -21,7 +21,7 @@ def main():
     It logs into LinkedIn, scrapes profiles, and saves the results to a JSON file.
     """
     # Load environment variables
-    load_dotenv()
+    load_dotenv(dotenv_path='./environment/.env')
 
     try:
         # Validate the NUMBER_PROFILE_DISCOVERIES environment variable
@@ -36,7 +36,7 @@ def main():
         # driver = webdriver.Chrome()
 
         # Log in to LinkedIn
-        driver.get('https://www.linkedin.com/login')
+        # driver.get('https://www.linkedin.com/login')
         # login(driver)
 
         profile_url = "https://www.linkedin.com/in/fauzanghaza"
