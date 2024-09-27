@@ -1,8 +1,10 @@
+from collections import deque
 import os
 import logging
+import time
 from dotenv import load_dotenv
 from selenium import webdriver
-from src.helper import login, start_chrome_with_debug, save_to_json
+from src.helper import add_random_delay, init_db, load_profile_list, login, save_profile_list, start_chrome_with_debug, save_to_json, mimic_human_interaction, load_profiles_from_csv, load_profiles_from_json, load_profiles_from_txt
 from src.scrape import scrape_profile, extract_more_profiles
 
 # Setup logging
@@ -20,57 +22,72 @@ def main():
     Main function to perform LinkedIn profile scraping.
     It logs into LinkedIn, scrapes profiles, and saves the results to a JSON file.
     """
+    max_profiles_per_hour = 50
+    scraped_count = 0
     # Load environment variables
     load_dotenv(dotenv_path='./environment/.env')
-
+    root_profiles_file = os.getenv("ROOT")
+    db_path = os.getenv("DB_PATH")
+    
+    if root_profiles_file.endswith('.json'):
+        list_profile = load_profiles_from_json(root_profiles_file)
+    elif root_profiles_file.endswith('.txt'):
+        list_profile = load_profiles_from_txt(root_profiles_file)
+    elif root_profiles_file.endswith('.csv'):
+        list_profile = load_profiles_from_csv(root_profiles_file)
+    else:
+        logging.error("Unsupported file format for root profiles.")
+        return
+    
+    if not list_profile:
+        logging.warning("No root profiles found in the file, starting with an empty set.")
+    
     try:
-        # Validate the NUMBER_PROFILE_DISCOVERIES environment variable
-        number_of_profiles = os.getenv('NUMBER_PROFILE_DISCOVERIES')
-        if not number_of_profiles:
-            raise ValueError("Missing environment variable: NUMBER_PROFILE_DISCOVERIES")
-        number_of_profiles = int(number_of_profiles)
-
         # Initialize the Selenium driver
         logging.info("Starting Chrome with remote debugging...")
         driver = start_chrome_with_debug()
-        # driver = webdriver.Chrome()
 
-        # Log in to LinkedIn
-        # driver.get('https://www.linkedin.com/login')
-        # login(driver)
+        # Initialize database and queue
+        init_db(db_path)
+        queue = deque(list_profile)
+        list_profile = load_profile_list(db_path)
 
-        profile_url = "https://www.linkedin.com/in/fauzanghaza"
-        profile_data = []
-        profile_discovered = []
-
-        for i in range(number_of_profiles):
-            logging.info(f"Processing profile number: {i+1}")
-            if profile_url not in profile_discovered:
+        while queue:
+            if scraped_count >= max_profiles_per_hour:
+                logging.info("Reached hourly limit. Pausing for 1 hour...")
+                time.sleep(3600)  # Sleep for 1 hour
+                scraped_count = 0
+            
+            # add_random_delay()
+            current_profile = queue.popleft()
+            # mimic_human_interaction(driver)
+            if current_profile not in list_profile:
                 try:
                     # Scrape the profile data
-                    profile_info = scrape_profile(driver, profile_url, visited_profiles=profile_discovered)
+                    profile_info = scrape_profile(driver, current_profile, visited_profiles=list_profile)
                     if profile_info:
-                        profile_data.append(profile_info)  # Append the scraped data
-                        profile_discovered.append(profile_url)
+                        list_profile.add(current_profile)
+                        # Save each profile after scraping, appending to the file
+                        save_to_json(profile_info)
+                        logging.info(f"Profile {current_profile} successfully saved.")
+
                     else:
-                        logging.warning(f"Failed to scrape profile: {profile_url}")
+                        logging.warning(f"Failed to scrape profile: {current_profile}")
 
                     # Discover more profiles to scrape
-                    profile_url = extract_more_profiles(driver)
-                    if not profile_url:
-                        logging.info("No more profiles found.")
-                        break
+                    new_links = extract_more_profiles(driver)
+                    new_links = [link for link in new_links if link not in list_profile]
+                    queue.extend(new_links)
+
+                    
+                    save_profile_list(db_path, current_profile)
+                    
+                    logging.info(f"Scraped profile: {current_profile}")
+                    scraped_count += 1
 
                 except Exception as e:
-                    logging.error(f"Error while scraping profile {profile_url}: {e}")
+                    logging.error(f"Error while scraping profile {current_profile}: {e}")
                     continue  # Proceed to the next profile in case of an error
-
-        # Save the collected data to a JSON file
-        if profile_data:
-            save_to_json(profile_data)
-            logging.info("Profile data successfully saved to JSON.")
-        else:
-            logging.warning("No profile data to save.")
 
     except Exception as e:
         logging.error(f"An error occurred during execution: {e}")
@@ -80,6 +97,7 @@ def main():
         if 'driver' in locals():
             driver.quit()
         logging.info("Driver successfully closed.")
+
 
 
 if __name__ == "__main__":

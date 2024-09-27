@@ -2,7 +2,7 @@ import logging
 from urllib.parse import urlparse, urlunparse
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
-from src.helper import scroll_and_load, get_object, get_objects, extract_elements
+from src.helper import mimic_human_interaction, scroll_and_load, get_object, get_objects, extract_elements
 
 
 # Setup logging to file and console
@@ -46,7 +46,10 @@ def extract_intro(driver):
             # Extract followers and connections
             followers_xpath = "//p[contains(@class, 'pvs-header__optional-link')]//span[contains(text(), 'followers')]"
             connections_xpath = "//li[@class='text-body-small']//span[@class='t-bold']"
-            intro_data["followers"] = extract_elements(driver, By.XPATH, followers_xpath).split()[0]
+            try:
+                intro_data["followers"] = extract_elements(driver, By.XPATH, followers_xpath).split()[0]
+            except:
+                intro_data["followers"] = None
             intro_data["connections"] = extract_elements(driver, By.XPATH, connections_xpath)
 
         else:
@@ -102,12 +105,27 @@ def extract_experience(driver):
             ) or None
 
             if nested_experiences:
-                company_name = extract_elements(experience, By.XPATH, ".//div[contains(@class, 'flex-wrap')]").split("\n")[0]
-                location = extract_elements(experience, By.XPATH, ".//a[@data-field='experience_company_logo']//span[contains(@class, 't-black--light')]").split("\n")[0]
-
+                try:
+                    company_name = extract_elements(experience, By.XPATH, ".//div[contains(@class, 'flex-wrap')]").split("\n")[0]
+                except:
+                    company_name = None
+                
+                try:
+                    location = extract_elements(experience, By.XPATH, ".//a[@data-field='experience_company_logo']//span[contains(@class, 't-black--light')]").split("\n")[0]
+                except:
+                    location = None
+                
                 for nested_exp in nested_experiences:
-                    job_title = extract_elements(nested_exp, By.XPATH, ".//div[@class='display-flex flex-wrap align-items-center full-height']").split("\n")[0]
-                    type = extract_elements(nested_exp, By.XPATH, ".//span[@class='t-14 t-normal']").split()[0]
+                    try:
+                        job_title = extract_elements(nested_exp, By.XPATH, ".//div[@class='display-flex flex-wrap align-items-center full-height']").split("\n")[0]
+                    except:
+                        job_title = None
+                    
+                    try:
+                        type = extract_elements(nested_exp, By.XPATH, ".//span[@class='t-14 t-normal']").split()[0]
+                    except:
+                        type = None
+                        
                     dates = extract_elements(nested_exp, By.XPATH, './/span[contains(@class, "t-black--light")]/span')
                     description = extract_elements(nested_exp, By.XPATH, ".//div[contains(@class,'inline-show-more-text--is-collapsed') and not(contains(@class, 'break-words'))]")
 
@@ -122,7 +140,10 @@ def extract_experience(driver):
                     experience_data.append(experience_dict)
 
             else:
-                company_type = extract_elements(experience, By.XPATH, ".//span[@class='t-14 t-normal']").split("\n")[0].split("·")
+                try:
+                    company_type = extract_elements(experience, By.XPATH, ".//span[@class='t-14 t-normal']").split("\n")[0].split("·")
+                except:
+                    company_name = None
                 company_name, type = company_type[0], company_type[1]
                 job_title = extract_elements(experience, By.XPATH, ".//div[contains(@class, 'flex-wrap')]")
                 dates = extract_elements(experience, By.XPATH, './/span[contains(@class, "t-black--light")]/span')
@@ -285,15 +306,18 @@ def extract_skill(driver):
 
         for skill in skill_elements:
             skill_data = {}
-
+            
             # Extract skill title
             title_xpath = ".//div[contains(@class, 'hoverable-link-text')]/span[@aria-hidden='true']"
             skill_data["title"] = extract_elements(skill, By.XPATH, title_xpath)
 
             # Extract endorsements count
-            endorsements_xpath = ".//span[contains(@aria-hidden, 'true') and contains(text(), 'endorsements')]"
-            skill_data["endorsements"] = extract_elements(skill, By.XPATH, endorsements_xpath).split()[0]
-
+            try:
+                endorsements_xpath = ".//span[contains(@aria-hidden, 'true') and contains(text(), 'endorsements')]"
+                skill_data["endorsements"] = extract_elements(skill, By.XPATH, endorsements_xpath).split()[0]
+            except:
+                skill_data["endorsements"] = None
+                pass
             skills.append(skill_data)
 
     except Exception:
@@ -319,7 +343,11 @@ def extract_honor(driver):
 
             # Extract issuing organization
             issuer_xpath = ".//span[contains(@class, 't-14 t-normal')]"
-            issuer_data = extract_elements(honor, By.XPATH, issuer_xpath).split("·")
+            try:
+                issuer_data = extract_elements(honor, By.XPATH, issuer_xpath).split("·")
+            except:
+                issuer_data = None
+                
             honor_data["issuer"] = issuer_data[0].strip()
             honor_data["issued_date"] = issuer_data[1].strip()
 
@@ -347,7 +375,11 @@ def extract_organizations(driver):
 
             # Extract role and duration
             role_duration_xpath = ".//span[contains(@class, 't-14 t-normal')]"
-            role_duration = extract_elements(entry, By.XPATH, role_duration_xpath).split("·")
+            try:
+                role_duration = extract_elements(entry, By.XPATH, role_duration_xpath).split("·")
+            except:
+                role_duration = None
+                
             organization_data["role"] = role_duration[0].strip() if len(role_duration) > 0 else None
             organization_data["duration"] = role_duration[1].strip() if len(role_duration) > 1 else None
 
