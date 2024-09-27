@@ -222,16 +222,39 @@ def extract_elements(driver, by, element, multiple=False, attribute=None, timeou
 
 
 # 4. Data Storage
-def save_to_json(data, filename="./data/profile_list.json"):
+# def save_to_json(data, filename="./data/profile_list.json"):
+#     """
+#     Save the scraped data to a JSON file.
+#     """
+#     try:
+#         with open(filename, "w", encoding="utf-8") as f:
+#             json.dump(data, f, ensure_ascii=False, indent=4)
+#         logging.info(f"Data saved to {filename}.")
+#     except Exception as e:
+#         logging.error(f"Error saving to JSON: {e}")
+        
+
+def save_to_json(profile_info, file_path='./data/scraped_profiles.json'):
     """
-    Save the scraped data to a JSON file.
+    Save a single profile's data to a JSON file, appending it one by one.
+    If the file doesn't exist, it will create one. 
+    If the file exists, it will append to the existing data.
     """
-    try:
-        with open(filename, "w", encoding="utf-8") as f:
-            json.dump(data, f, ensure_ascii=False, indent=4)
-        logging.info(f"Data saved to {filename}.")
-    except Exception as e:
-        logging.error(f"Error saving to JSON: {e}")
+    if not os.path.exists(file_path):
+        # Create the file if it doesn't exist and write the first profile
+        with open(file_path, 'w') as file:
+            json.dump([profile_info], file, indent=4)
+    else:
+        # If the file exists, load the current data, append the new profile, and save
+        with open(file_path, 'r+') as file:
+            try:
+                data = json.load(file)
+            except json.JSONDecodeError:
+                data = []
+            data.append(profile_info)
+            file.seek(0)
+            json.dump(data, file, indent=4)
+
 
 def save_to_mongo(data):
     """
@@ -383,38 +406,14 @@ def add_random_delay(min_time=5, max_time=30):
 
 def mimic_human_interaction(driver):
     """Mimics human interaction by randomly moving the mouse and scrolling."""
-    action = ActionChains(driver)
-    x_offset = random.randint(100, 500)
-    y_offset = random.randint(100, 500)
-    action.move_by_offset(x_offset, y_offset).perform()
+    # action = ActionChains(driver)
+    # x_offset = random.randint(100, 250)
+    # y_offset = random.randint(100, 250)
+    # action.move_by_offset(x_offset, y_offset).perform()
     
     # Scroll randomly
-    scroll_distance = random.randint(100, 500)
+    scroll_distance = random.randint(50, 100)
     driver.execute_script(f"window.scrollBy(0, {scroll_distance});")
     add_random_delay()
     
     
-    
-def create_session(email, password):
-    """Logs in to LinkedIn using Selenium and returns a requests.Session."""
-    driver = webdriver.Chrome()
-    
-    # Step 1: Navigate to LinkedIn's login page
-    driver.get('https://www.linkedin.com/checkpoint/rm/sign-in-another-account')
-    add_random_delay()
-    
-    # Step 2: Enter login details and submit
-    driver.find_element(By.ID, 'username').send_keys(email)
-    driver.find_element(By.ID, 'password').send_keys(password)
-    driver.find_element(By.XPATH, '//*[@id="organic-div"]/form/div[3]/button').click()
-    add_random_delay()
-    mimic_human_interaction(driver)
-
-    # Step 3: Wait for successful login and retrieve cookies
-    cookies = driver.get_cookies()
-    session = requests.Session()
-    for cookie in cookies:
-        session.cookies.set(cookie['name'], cookie['value'])
-
-    driver.quit()
-    return session
