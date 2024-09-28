@@ -96,7 +96,11 @@ To enable Selenium to control Chrome with remote debugging, you'll need to start
 
 Make sure to replace `your_username` or `YourUsername` with your actual username.
 
-### 6. Running the Scraper
+### 6. Loggin to your scraping linkedin account (Don't use main account)
+
+After Chrome is running with remote debugging enabled, logging to your linkedin scraping account.
+
+### 7. Running the Scraper
 
 After Chrome is running with remote debugging enabled, run the main script to start scraping:
 
@@ -104,11 +108,11 @@ After Chrome is running with remote debugging enabled, run the main script to st
 python src/main.py
 ```
 
-### 7. Output
+### 8. Output
 
 The scraped LinkedIn profiles will be saved in `data/scraped_profiles.json`. Each profile is saved one by one, ensuring that the script can recover from crashes without losing previously scraped data.
 
-### 8. Logging
+### 9. Logging
 
 All logs related to the scraping process are stored in the `log/scraping.log` file. These logs are useful for debugging and tracking the progress of the scraper.
 
