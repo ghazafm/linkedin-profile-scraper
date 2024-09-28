@@ -22,7 +22,7 @@ def main():
     Main function to perform LinkedIn profile scraping.
     It logs into LinkedIn, scrapes profiles, and saves the results to a JSON file.
     """
-    max_profiles_per_hour = 50
+    max_profiles_per_hour = 25
     scraped_count = 0
     # Load environment variables
     load_dotenv(dotenv_path='./environment/.env')
@@ -58,7 +58,7 @@ def main():
                 time.sleep(3600)  # Sleep for 1 hour
                 scraped_count = 0
             
-            # add_random_delay()
+            add_random_delay(20,60)
             current_profile = queue.popleft()
             # mimic_human_interaction(driver)
             if current_profile not in list_profile:
