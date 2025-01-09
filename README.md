@@ -105,7 +105,7 @@ After Chrome is running with remote debugging enabled, logging to your linkedin 
 After Chrome is running with remote debugging enabled, run the main script to start scraping:
 
 ```bash
-python src/main.py
+python main.py
 ```
 
 ### 8. Output
