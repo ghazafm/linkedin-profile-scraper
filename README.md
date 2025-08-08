@@ -86,12 +86,12 @@ To enable Selenium to control Chrome with remote debugging, you'll need to start
 
 #### For **MacOS**:
 ```bash
-/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 --user-data-dir="/Users/your_username/ChromeSession"
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 --user-data-dir="/tmp/chrome-debug"
 ```
 
 #### For **Windows**:
 ```bash
-"C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="C:\Users\YourUsername\ChromeSession"
+"C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="C:\Users\YourUsername\ChromeDebugSession"
 ```
 
 Make sure to replace `your_username` or `YourUsername` with your actual username.
